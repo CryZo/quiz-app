@@ -11,5 +11,5 @@ RUN yarn
 RUN yarn build
 
 RUN mkdir -p /app/dist/bundle-generator
-RUN cp -r /app/bundle-generator/dist /app/dist/bundle-generator
-RUN cp -r /app/quiz-app/dist /app/dist
+RUN cp -r /app/bundle-generator/dist/* /app/dist/bundle-generator/
+RUN cp -r /app/quiz-app/dist/* /app/dist/
