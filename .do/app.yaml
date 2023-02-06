@@ -6,4 +6,4 @@ static_sites:
       branch: main
       repo: CryZo/quiz-app
     dockerfile_path: Dockerfile.static
-    output_dir: /app/dist
+    output_dir: /app/dist/

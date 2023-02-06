@@ -4,11 +4,11 @@ COPY . /app
 
 WORKDIR /app/bundle-generator
 RUN yarn
-RUN yarn build
+RUN BASE='/bundle-generator/' yarn build
 
 WORKDIR /app/quiz-app
 RUN yarn
-RUN yarn build
+RUN BASE='/' yarn build
 
 RUN mkdir -p /app/dist/bundle-generator
 RUN cp -r /app/bundle-generator/dist/* /app/dist/bundle-generator/
