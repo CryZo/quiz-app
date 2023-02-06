@@ -1,0 +1,8 @@
+spec:
+ name: quiz-app
+ static_sites:
+ - git:
+     branch: main
+     repo_clone_url: https://github.com/CryZo/quiz-app.git
+   name: quiz-app
+   dockerfile_path: Dockerfile.static
