@@ -1,4 +1,4 @@
-quiz-app
+name: quiz-app
 static_sites:
   - name: web
     github:
