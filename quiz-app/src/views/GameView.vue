@@ -1,6 +1,20 @@
 <template>
-  <div :class="`w-full h-full flex flex-col ${showAnswers ? isCorrect ? 'bg-green-800' : 'bg-red-800' : 'bg-zinc-900'} text-white relative`">
+  <div v-if="categorySelectorVisible" class="w-full h-full p-8 flex flex-col items-center bg-yellow-300 text-black">
+    <span class="text-5xl">{{ lastWinner.name }}, wähle eine Kategorie:</span>
+
+    <div class="my-auto w-96 flex flex-col gap-4">
+      <span
+        v-for="i, c in categoryIndexes"
+        class="answer | inline-flex items-center justify-center text-white font-bold bg-red-500 before:!border-t-red-500 before:!border-r-red-500 after:!border-t-red-500 after:!border-r-red-500"
+        >
+        <span>{{ c+1 }}.</span>
+        <span class="mx-auto">{{ questionsStore.bundles[i].title }}</span>
+      </span>
+    </div>
+  </div>
+  <div v-else :class="`w-full h-full flex flex-col ${showAnswers ? isCorrect ? 'bg-green-800' : 'bg-red-800' : 'bg-zinc-900'} text-white relative`">
     <!-- <div class="bottom-shadow"></div> -->
+    <span class="absolute top-2 right-2 text-red-400 font-bold">{{ questionsStore.bundles[bundleIndex].title }}</span>
 
     <div v-if="curQuestion" class="h-full w-full flex flex-col justify-evenly items-center">
       <span class="text-5xl text-center">{{ curQuestion.question }}</span>
@@ -36,11 +50,38 @@ const highscoresStore = useHighscoresStore();
 const totalQuestions = 10;
 const correctPoints = 100;
 const falsePoints = 100;
+const categoryCount = 2;
 
+const lastWinner = ref<IPlayer>(playersStore.players[Math.floor(Math.random() * playersStore.players.length)]);
+const bundleIndex = ref<number>(-1)
 const curQuestion = ref<IQuestion>();
-const questionHistory = ref<number[]>([]);
+const questionHistory = ref<string[]>([]);
 const showAnswers = ref(false);
 const isCorrect = ref(true);
+const categorySelectorVisible = ref(true);
+const categoryIndexes = ref<number[]>([]);
+
+const getRandomCategories = () => {
+  const ret: number[] = [];
+  while (ret.length < categoryCount) {
+    const tmpIndex = Math.floor(Math.random() * questionsStore.bundles.length);
+    if (!ret.includes(tmpIndex))
+      ret.push(tmpIndex);
+  }
+
+  return ret;
+}
+
+const showCategorySelector = () => {
+  categoryIndexes.value = getRandomCategories();
+  categorySelectorVisible.value = true;
+};
+
+const setNextCategory = (index: number) => {
+  bundleIndex.value = index;
+  categorySelectorVisible.value = false;
+  setNextQuestion();
+};
 
 const setNextQuestion = () => {
   if (questionHistory.value.length >= totalQuestions) {
@@ -55,22 +96,31 @@ const setNextQuestion = () => {
     return;
   }
 
-  let index;
+  let questionIndex;
   while (true) {
-    index = Math.floor(Math.random() * questionsStore.questions.length);
-    if (!questionHistory.value.includes(index))
+    questionIndex = Math.floor(Math.random() * questionsStore.bundles[bundleIndex.value].questions.length);
+    if (!questionHistory.value.includes(`${bundleIndex.value}_${questionIndex}`))
       break;
   }
 
-  curQuestion.value = questionsStore.questions[index];
-  questionHistory.value.push(index);
+  curQuestion.value = questionsStore.bundles[bundleIndex.value].questions[questionIndex];
+  questionHistory.value.push(`${bundleIndex.value}_${questionIndex}`);
 }
 
 const handleInput = (ev: any) => {
+  const e: KeyboardEvent = ev.event;
+
+  if (categorySelectorVisible.value) {
+    for (let i = 1; i < 10 && i < categoryCount; i++) {
+      if (e.key === i.toString())
+        return setNextCategory(i-1);
+    }
+
+    return;
+  }
+
   if (showAnswers.value === true)
     return;
-
-  const e: KeyboardEvent = ev.event;
 
   const isActive = (): boolean => {
     let ret = false;
@@ -95,9 +145,11 @@ const handleInput = (ev: any) => {
     isCorrect.value = curQuestion.value!.answers[answer-1].isCorrect;
     if (curQuestion.value!.answers[answer-1].isCorrect) {
       player.score += correctPoints;
+      lastWinner.value = player
     }
     else {
       player.score -= falsePoints;
+      lastWinner.value = playersStore.players[Math.floor(Math.random() * playersStore.players.length)];
     }
     player.isActive = false;
 
@@ -105,7 +157,8 @@ const handleInput = (ev: any) => {
     
     setTimeout(() => {
       showAnswers.value = false;
-      setNextQuestion();
+      showCategorySelector();
+      // setNextQuestion();
     }, 1500);
   }
 
@@ -153,7 +206,8 @@ const handleInput = (ev: any) => {
 };
 
 onMounted(() => {
-  setNextQuestion();
+  // setNextQuestion();
+  categoryIndexes.value = getRandomCategories();
 });
 
 useKeypress({
