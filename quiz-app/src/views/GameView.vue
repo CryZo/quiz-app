@@ -50,7 +50,7 @@ const highscoresStore = useHighscoresStore();
 const totalQuestions = 10;
 const correctPoints = 100;
 const falsePoints = 100;
-const categoryCount = 2;
+const categoryCount = 3;
 
 const lastWinner = ref<IPlayer>(playersStore.players[Math.floor(Math.random() * playersStore.players.length)]);
 const bundleIndex = ref<number>(-1)
@@ -113,7 +113,7 @@ const handleInput = (ev: any) => {
   if (categorySelectorVisible.value) {
     for (let i = 1; i < 10 && i < categoryCount; i++) {
       if (e.key === i.toString())
-        return setNextCategory(i-1);
+        return setNextCategory(categoryIndexes.value[i-1]);
     }
 
     return;
