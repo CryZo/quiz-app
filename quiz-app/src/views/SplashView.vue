@@ -2,10 +2,10 @@
   <div
     @dragover="dragOverHandler"
     @drop="dropHandler"
-    class="w-full h-full flex flex-col justify-evenly items-center bg-purple-700"
+    class="w-full h-full flex flex-col justify-evenly items-center"
     >
-    <h1 class="text-9xl font-bold text-center">Cooler Titel hier einfügen</h1>
-    <p>Zum beginnen Bundles ins Fenster ziehen</p>
+    <h1 class="text-9xl font-bold text-center text-shadow-xl">Chasers Quiz</h1>
+    <p class="text-lg">Zum beginnen Bundles ins Fenster ziehen</p>
 
     <template v-if="store.bundles.length">
       <ul>

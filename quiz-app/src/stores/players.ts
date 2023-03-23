@@ -11,7 +11,7 @@ export const usePlayersStore = defineStore('players', () => {
     players.value.length = 0;
     for (let i = 0; i < value; i++)
       players.value.push({
-        name: '',
+        name: `Spieler ${i+1}`,
         score: 0,
         isActive: false
       });

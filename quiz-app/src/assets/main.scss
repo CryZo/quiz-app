@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: BlackwoodCastle;
+  src: url(BlackwoodCastle.ttf);
+}
+
+@font-face {
+  font-family: BladeRunner;
+  src: url(BladeRunner.ttf);
+}
+
+@font-face {
+  font-family: TrashHand;
+  src: url(TrashHand.ttf);
+}
+
+body {
+  background: url(bg.jpg);
+  font-family: TrashHand;
+}
+
+.text-shadow-xl {
+  text-shadow: .25rem .25rem #00000059;
+}

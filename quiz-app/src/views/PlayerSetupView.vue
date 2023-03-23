@@ -1,16 +1,22 @@
 <template>
-  <div v-if="store.setupStep === 0" class="w-full h-full flex flex-col justify-evenly items-center bg-yellow-700">
-    <h1 class="text-3xl font-bold text-center">Wie viele Spieler werden teilnehmen?</h1>
+  <div v-if="store.setupStep === 0" class="w-full h-full flex flex-col justify-evenly items-center">
+    <Heading>Wie viele Spieler werden teilnehmen?</Heading>
     
-    <div class="w-full flex flex-row justify-evenly">
-      <button @click="store.setPlayerCount(1)" class="playerButton bg-green-500">1</button>
+    <div class="w-full h-48 flex flex-row justify-evenly">
+      <Keycap @click="store.setPlayerCount(1)" class="playerButton" label="1"></Keycap>
+      <Keycap @click="store.setPlayerCount(2)" class="playerButton" label="2"></Keycap>
+      <Keycap @click="store.setPlayerCount(3)" class="playerButton" label="3"></Keycap>
+
+
+
+      <!-- <button @click="store.setPlayerCount(1)" class="playerButton bg-green-500">1</button>
       <button @click="store.setPlayerCount(2)" class="playerButton bg-indigo-500">2</button>
-      <button @click="store.setPlayerCount(3)" class="playerButton bg-orange-500">3</button>
+      <button @click="store.setPlayerCount(3)" class="playerButton bg-orange-500">3</button> -->
     </div>
   </div>
 
-  <div v-else-if="store.setupStep === 1" class="w-full h-full flex flex-col justify-evenly items-center bg-blue-900">
-    <h1 class="text-3xl font-bold text-center">Namen eingeben</h1>
+  <div v-else-if="store.setupStep === 1" class="w-full h-full flex flex-col justify-evenly items-center">
+    <Heading>Namen eingeben</Heading>
     
     <div class="w-full flex flex-row justify-evenly">
       <div v-for="player,i in store.players" class="flex flex-col">
@@ -27,6 +33,8 @@
 import { usePlayersStore } from '@/stores/players';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import Heading from '@/components/Heading.vue';
+import Keycap from '@/components/Keycap.vue';
 const router = useRouter();
 
 const store = usePlayersStore();
@@ -45,7 +53,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .playerButton {
-  @apply w-48 h-48 rounded-lg border-2 border-black font-bold text-5xl shadow-xl hover:animate-bounce;
+  // @apply w-48 h-48 rounded-lg border-2 border-black font-bold text-5xl shadow-xl hover:animate-bounce;
 
   &:hover {
     animation: tada 600ms;

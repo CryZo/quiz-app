@@ -5,7 +5,13 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'BladeRunner': 'BladeRunner',
+        'BlackwoodCastle': 'BlackwoodCastle',
+        'TrashHand': 'TrashHand'
+      }
+    },
   },
   plugins: [],
 }

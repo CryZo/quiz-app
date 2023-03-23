@@ -1,25 +1,28 @@
 <template>
-  <div v-if="categorySelectorVisible" class="w-full h-full p-8 flex flex-col items-center bg-yellow-300 text-black">
-    <span class="text-5xl">{{ lastWinner.name }}, wähle eine Kategorie:</span>
+  <div v-if="categorySelectorVisible" class="w-full h-full p-8 flex flex-col items-center">
+    <span class="text-7xl">{{ lastWinner.name }}, wähle eine Kategorie:</span>
 
-    <div class="my-auto w-96 flex flex-col gap-4">
+    <div class="my-auto w-96 flex flex-col gap-8">
       <span
         v-for="i, c in categoryIndexes"
-        class="answer | inline-flex items-center justify-center text-white font-bold bg-red-500 before:!border-t-red-500 before:!border-r-red-500 after:!border-t-red-500 after:!border-r-red-500"
+        class="answer | inline-flex items-center justify-center text-black font-bold bg-orange-300 before:!border-t-orange-300 before:!border-r-orange-300 after:!border-t-orange-300 after:!border-r-orange-300"
         >
-        <span>{{ c+1 }}.</span>
+        <Keycap class="absolute left-0 -top-1/2 h-12" :label="(c+1).toString()"></Keycap>
         <span class="mx-auto">{{ questionsStore.bundles[i].title }}</span>
       </span>
     </div>
   </div>
-  <div v-else :class="`w-full h-full flex flex-col ${showAnswers ? isCorrect ? 'bg-green-800' : 'bg-red-800' : 'bg-zinc-900'} text-white relative`">
+  <div v-else :class="`w-full h-full flex flex-col relative`">
     <!-- <div class="bottom-shadow"></div> -->
-    <span class="absolute top-2 right-2 text-red-400 font-bold">{{ questionsStore.bundles[bundleIndex].title }}</span>
+    <!-- <span class="absolute top-2 right-2 text-red-400 font-bold">{{ questionsStore.bundles[bundleIndex].title }}</span> -->
+    <div class="absolute top-2 right-0 w-96 rotate-12">
+      <Heading class="">{{ questionsStore.bundles[bundleIndex].title }}</Heading>
+    </div>
 
     <div v-if="curQuestion" class="h-full w-full flex flex-col justify-evenly items-center">
-      <span class="text-5xl text-center">{{ curQuestion.question }}</span>
+      <span class="text-7xl text-center">{{ curQuestion.question }}</span>
 
-      <div class="grid grid-cols-2 gap-x-12 gap-y-4">
+      <div class="grid grid-cols-2 gap-x-16 gap-y-4 text-white">
         <span
           v-for="answer,i in curQuestion.answers"
           :class="`answer | inline-flex items-center justify-center ${showAnswers ? answer.isCorrect ? 'bg-green-500 before:!border-t-green-500 before:!border-r-green-500 after:!border-t-green-500 after:!border-r-green-500' : 'bg-red-500 before:!border-t-red-500 before:!border-r-red-500 after:!border-t-red-500 after:!border-r-red-500' : 'bg-zinc-800 before:!border-t-zinc-800 before:!border-r-zinc-800 after:!border-t-zinc-800 after:!border-r-zinc-800'}`"
@@ -41,6 +44,8 @@ import { useRouter } from 'vue-router';
 import { useKeypress } from 'vue3-keypress'
 
 import PlayerRow from '@/components/PlayerRow.vue';
+import Keycap from '@/components/Keycap.vue';
+import Heading from '@/components/Heading.vue';
 
 const router = useRouter();
 const playersStore = usePlayersStore();
@@ -111,7 +116,8 @@ const handleInput = (ev: any) => {
   const e: KeyboardEvent = ev.event;
 
   if (categorySelectorVisible.value) {
-    for (let i = 1; i < 10 && i < categoryCount; i++) {
+    for (let i = 1; i <= 9 && i <= categoryCount; i++) {
+      console.log(i.toString())
       if (e.key === i.toString())
         return setNextCategory(categoryIndexes.value[i-1]);
     }
@@ -196,11 +202,9 @@ const handleInput = (ev: any) => {
   }
 
   if (isActive()) {
-    switch (e.key) {
-      case '1': return checkAnswer(getActivePlayer()!, 1);
-      case '2': return checkAnswer(getActivePlayer()!, 2);
-      case '3': return checkAnswer(getActivePlayer()!, 3);
-      case '4': return checkAnswer(getActivePlayer()!, 4);
+    for (let i = 1; i <= 4; i++) {
+      if (e.key === i.toString())
+        return checkAnswer(getActivePlayer()!, i)
     }
   }
 };
@@ -229,16 +233,17 @@ useKeypress({
 .answer {
   position: relative;
 
-  $height: 2rem;
+  $height: 4rem;
 
-  height: calc($height + 4px);
+  height: calc($height + 12px);
+  font-size: $height /2;
 
   &::before, &::after {
     $sideLength: math.div($height * math.sin(45), 2);
 
     content: '';
     position: absolute;
-    top: 5px;
+    top: 10px;
 
     border-left: solid $sideLength transparent;
     border-top: solid $sideLength black;
@@ -252,12 +257,12 @@ useKeypress({
   }
 
   &::before {
-    left: calc(math.div($height, 2) * -1 + 4px);
+    left: calc(math.div($height, 2) * -1 + 6px);
     transform: rotate(-135deg);
   }
 
   &::after {
-    right: calc(math.div($height, 2) * -1 + 4px);
+    right: calc(math.div($height, 2) * -1 + 6px);
     transform: rotate(45deg);
   }
 }
