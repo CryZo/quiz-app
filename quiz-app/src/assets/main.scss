@@ -17,9 +17,15 @@
   src: url(TrashHand.ttf);
 }
 
+@font-face {
+  font-family: BlackPirates;
+  src: url(BlackPirates.otf);
+}
+
 body {
   background: url(bg.jpg);
-  font-family: TrashHand;
+  font-family: BlackPirates;
+  font-size: 2rem;
 }
 
 .text-shadow-xl {

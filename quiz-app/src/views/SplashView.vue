@@ -4,7 +4,7 @@
     @drop="dropHandler"
     class="w-full h-full flex flex-col justify-evenly items-center"
     >
-    <h1 class="text-9xl font-bold text-center text-shadow-xl">Chasers Quiz</h1>
+    <h1 class="text-9xl font-bold text-center text-shadow-xl">Piraten Quiz</h1>
     <p class="text-lg">Zum beginnen Bundles ins Fenster ziehen</p>
 
     <template v-if="store.bundles.length">
@@ -38,7 +38,7 @@ const dropHandler = (e: DragEvent) => {
   const fileList = e.dataTransfer!.files;
   for (let i = 0; i < fileList.length; i++) {
     const file = fileList[i];
-    
+
     if (file.type === 'application/json') {
       const reader = new FileReader();
       reader.addEventListener('load', (event) => {

@@ -9,7 +9,8 @@ module.exports = {
       fontFamily: {
         'BladeRunner': 'BladeRunner',
         'BlackwoodCastle': 'BlackwoodCastle',
-        'TrashHand': 'TrashHand'
+        'TrashHand': 'TrashHand',
+        'BlackPirates': 'BlackPirates'
       }
     },
   },

@@ -68,10 +68,17 @@ const categoryIndexes = ref<number[]>([]);
 
 const getRandomCategories = () => {
   const ret: number[] = [];
-  while (ret.length < categoryCount) {
-    const tmpIndex = Math.floor(Math.random() * questionsStore.bundles.length);
-    if (!ret.includes(tmpIndex))
-      ret.push(tmpIndex);
+  if (questionsStore.bundles.length > 3) {
+    while (ret.length < categoryCount) {
+      const tmpIndex = Math.floor(Math.random() * questionsStore.bundles.length);
+      if (!ret.includes(tmpIndex))
+        ret.push(tmpIndex);
+    }
+  }
+  else {
+    for (let i = 0; i < questionsStore.bundles.length; i++) {
+      ret.push(i);
+    }
   }
 
   return ret;
@@ -79,6 +86,10 @@ const getRandomCategories = () => {
 
 const showCategorySelector = () => {
   categoryIndexes.value = getRandomCategories();
+  if (categoryIndexes.value.length === 1) {
+    return setNextCategory(categoryIndexes.value[0]);
+  }
+
   categorySelectorVisible.value = true;
 };
 
@@ -117,7 +128,6 @@ const handleInput = (ev: any) => {
 
   if (categorySelectorVisible.value) {
     for (let i = 1; i <= 9 && i <= categoryCount; i++) {
-      console.log(i.toString())
       if (e.key === i.toString())
         return setNextCategory(categoryIndexes.value[i-1]);
     }
@@ -141,7 +151,7 @@ const handleInput = (ev: any) => {
   const getActivePlayer = (): IPlayer|undefined => {
     for (let i = 0; i < playersStore.players.length; i++) {
       const player = playersStore.players[i];
-      
+
       if (player.isActive)
         return player;
     }
@@ -160,7 +170,7 @@ const handleInput = (ev: any) => {
     player.isActive = false;
 
     showAnswers.value = true;
-    
+
     setTimeout(() => {
       showAnswers.value = false;
       showCategorySelector();
@@ -211,7 +221,8 @@ const handleInput = (ev: any) => {
 
 onMounted(() => {
   // setNextQuestion();
-  categoryIndexes.value = getRandomCategories();
+  // categoryIndexes.value = getRandomCategories();
+  showCategorySelector();
 });
 
 useKeypress({
