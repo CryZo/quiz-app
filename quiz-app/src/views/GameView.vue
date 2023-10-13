@@ -20,7 +20,7 @@
     </div>
 
     <div v-if="curQuestion" class="h-full w-full flex flex-col justify-evenly items-center">
-      <span class="text-7xl text-center">{{ curQuestion.question }}</span>
+      <span class="text-7xl text-center px-12">{{ curQuestion.question }}</span>
 
       <div class="grid grid-cols-2 gap-x-16 gap-y-4 text-white">
         <span
